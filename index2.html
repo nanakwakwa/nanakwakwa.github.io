@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Adder and Subtrator with Comparator</title>
+</head>
+<body bgcolor="white">
+
+<h1 align=center>Adder and Subtractor with Comparator</h1>
+		<p align=center>EE 103: Intro to VLSI Desig, EE103</p>
+		<p align=center>Tufts University, Fall 2013</p>
+		<p align=center>By <b>Leiny Garcia</b> and <b>Nana Kwasi Kwakwa</b></p>
+
+
+<h2 style="background-color: teal;" ><font color="white">&nbsp;&nbsp;Performance Goals</h2></font>
+		<p>This project consists of an 8-bit Adder that was designed using Cadence Design System. The goals for this project were: </p>
+		<UL><LI>Increase speed for worst case using asymmetrical logic gates
+		<LI>Construct a comparator that outputs whether the first summation is less than, equal to, or greather than the second sum</UL>
+
+<h2 style="background-color:maroon;"><font color="white">&nbsp;&nbsp;Logic Gates</h2></font>
+	<h2>&nbsp;&nbsp;2 Input NAND</h2>
+			<UL><LI><p><a href="vlsi_pics/schematics/Nand2_Schem.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/schematics/Adder/NANDtwo_Sym.png">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/functional/nand2func.png">Functional Code</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Nand2_Layout.png">Layout</a></p></UL>
+
+	<h2>&nbsp;&nbsp;2 Input NOR</h2>
+			<UL><LI><p><a href="vlsi_pics/schematics/Nor2_Schem.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/schematics/Adder/NORtwo_Sym.png">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/functional/NOR_2_Func.png">Functional Code</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/NOR_2_layout.png">Layout</a></p></UL>
+
+	<h2>&nbsp;&nbsp;2 Input XOR</h2>
+			<UL><LI><p><a href="vlsi_pics/schematics/Adder/XOR_T-schen.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/schematics/Adder/XOR_Sym.png">Symbol</a></p>
+                        <LI><p><a href="vlsi_pics/functional/XOR_func.png">Functional Code</a></p>
+			<LI><p><a href="vlsi_pics/layouts/XOR_layout.png">Layout</a></p></UL>
+
+	<h2>&nbsp;&nbsp;3 Input NAND</h2>
+			<UL><LI><p><a href="vlsi_pics/schematics/Adder/nand3schem.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/schematics/Adder/nand3sym.png">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/functional/nand3func.png">Functional Code</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/nand3layout.png">Layout</a></p></UL>
+
+	<h2>&nbsp;&nbsp;3 Input NOR</h2>
+			<UL><LI><p><a href="vlsi_pics/schematics/Adder/Nor3schem.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/schematics/Adder/Nor3sym.png">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/functional/nor3func.png">Functional Code</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Nor3layout.png">Layout</a></p></UL>
+
+	<h2>&nbsp;&nbsp;Inverter</h2>
+			<UL><LI><p><a href="vlsi_pics/schematics/Inverter_Schem.png">Schematic</a></p>
+			<LI><p><a href="vlsi_pics/schematics/Inverter_Symbol.png">Symbol</a></p>
+                        <LI><p><a href="vlsi_pics/functional/Inv_Func.png">Functional Code</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Inverter_layout.png">Layout</a></p></UL>
+
+
+<h2 style="background-color:teal;"><font color="white">&nbsp;&nbsp;Adder and Subtractor</h2></font>
+
+		 <p align=center><img src="vlsi_pics/High_Level_Diagram.png" width="800" height="400" align="middle"> </p>
+
+<p>In the Adder and Subtractor design, an intuitive source of delay is the carry out that propogates through cascaded one bit adders. The consecutive one bit adder must wait for the previous adders to finish calculating. With this problem in mind, asymmetrical gates were used in the logic of the sum, carry out of one bit adder, and the fourth carry of a four cascaded one bit adder. The Asymetrical XOR was used for the Sum, because, due to the limited transistors available, the sum must go through two XOR's. These gates are the biggest source of delay since the logical effort of an XOR is 4ns. The second stage of XOR was replaced with an asymetrical XOR. In the case of the carry out of a one bit adder, the inputs  go through two stages of NAND gates. Therefore, an asymmetrical NAND gate was placed in the second stage in providing Carry out. Finally, the CLA determines the value of carry out using logic that includes a group Generate and Propogate Output. The grouping logic is another source of delay. The NAND gates in the CLA logic were replaced with asymetrical NAND.  </p>
+
+		<h2><font color="brown">&nbsp;&nbsp;Logic Gates</h2></font>
+		<h2>&nbsp;&nbsp;Asymmetrical NAND Gate</h2>
+
+			<p>An Asymmetrical Logic Gate is used when a circuit has inputs that take a while to arrive to the transistor.This way, while the transistor is waiting for the second input, the early input can start charging most of the capacitors in the transistor, leaving the later input with lower capacitance to charge. As a result, the transistor quickly produces an output when the second input arrives. The logical effort of the late input is smaller than the early input in order for the transistor to output faster. In this gate, input A has a large logical effort of 2ns, compared to the logical effort of 1.5ns from input B.Therefore, input A is used for early inputs, and input B is used for later inputs. A Layout could not be made that would pass LVS and DRC, therefore a Post Simulation could not be made with this gate to compare the results. However, the spectre simulations shows worst case delay improvement when using this asymetrical gate in the Adder and Subtractor.The average logical effort of this gate is 1.75ns. </p>
+                        <UL><LI><p><a href="vlsi_pics/schematics/Adder/NAND_TWo_Assym_Schem.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/schematics/Adder/asymNAND_Sym.png">Symbol</a></p>
+                        <LI><p><a href="vlsi_pics/spectre/Adder/ASYM_Nand_Spectre.png">Spectre Simulation</a></p>
+			<LI><p><a href="vlsi_pics/layouts/Adder/NAND_TWo_Assym_layout.png">Attempted Layout</a></p>
+                        <LI><p><a href="vlsi_pics/functional/Adder/Asym_NAND_Func_Code.png">Functional Code</a></p></UL>
+		
+		<h2>&nbsp;&nbsp;Asymmetrical XOR Gate</h2>
+			<p>This XOR gate has sizes that provide a small logical effor for the later Input B, and a large  of this gate has a smaller logical effort than that of A. The average general effort was calculated to be 2.52, because the average effort of the XOR gate is 1.8, but we wanted to account for the inverters that were added to the gate in order to increase the power. Without the inverters, the XOR gate rises slowly. The inverters should have a logical gate of 1, however, in cadence the sizes are not that of a unit inverter. The inverter size was comparted to the unit inverter, and a logical effort 1.4. </p>
+                        <UL><LI><p><a href="vlsi_pics/schematics/Adder/XOR_Asym_Schematic.png">Schematic</a></p>
+                        <LI><p><a href="vlsi_pics/functional/Adder/Asym_XOR_Func_Code.png">Functional Code</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Adder/XOR_Asym_Layout.png">Layout</a></p>
+                        <LI><p><a href="vlsi_pics/post_layout/Assym_XOR_PL.png">Post Layout Simulation</a></p>
+                        <LI><p><a href="vlsi_pics/DRC_LVS/Adder/XOR_Asym_LVS.png">LVS</a></p>
+                        <LI><p><a href="vlsi_pics/DRC_LVS/Adder/AsymXOR_DRC.png">DRC</a></p></UL>
+
+	<h2><font color="brown">&nbsp;&nbsp;Add/Subtrator Levels of Design</h2></font>
+
+		<h2>&nbsp;&nbsp;One Bit Adder</h2>
+			<p>This Adder not only produces a Sum and Carry Out, but also generate and propogate values. These determine whether there will exist a carry out in the end of cascaded one bit adders. In this design, the one-bit adder is cascaded to create a four-bit adder.Generate is the carry that is produced from adding A and B. Propogate is the carry that is produced if a propogating carry would be added to A and B. 			
+    		       <UL><LI><p><a href="vlsi_pics/schematics/Adder/One_Bit_before.png">Schematic Before AG</a></p>
+	  	       <LI><p><a href="vlsi_pics/schematics/Adder/One_FA_withAs.png">Schematic With AG</a></p>
+			<LI><p><a href="vlsi_pics/schematics/Adder/onebit_Sym.png">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/spectre/Adder/One_Bit_Spectre_Simulation.png">Spectre Simulation</a></p>
+                       <LI> <p><a href="vlsi_pics/functional/Adder/One-bit/One_bit_before_Full.png">Behavioral Simulation Before AG</a></p>
+		       <LI><p><a href="vlsi_pics/functional/Adder/One-bit/One_bit_XOR&NAND.png">Behavioral Simulation After AG</a></p>
+                       <LI> <p><a href="vlsi_pics/layouts/Adder/One_Bit_Adder_Layout.png">Layout</a></p>
+                       <LI> <p><a href="vlsi_pics/post_layout/One-bit_PL_Test.png">Post Layout Simulation</a></p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;Inputs for the Post Layout Simulation were A, B, C  with a period of 50ns and Delay of 10ns, 15ns, and 25ns.</p>	
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Adder/One_bit_DRC.png">DRC</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Adder/One_bit_LVS_v2.png">LVS</a></p></UL>
+
+
+		<h2>&nbsp;&nbsp;Carry Look Ahead Adder</h2>
+			<p>This CLA determines the value of C4 using the generate and propogate outputs of the one bit adder. The G and P are grouped. This circuit originally consisted ofand and or gates, but bubble pushing was used to change the circuit to only NAND gates.  </p>
+                        <UL><LI><p><a href="vlsi_pics/schematics/Adder/CLA_Schem.png">Schematic</a></p>
+			<LI><p><a href="vlsi_pics/schematics/Adder/CLASYM.jpg">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/spectre/Adder/CLA_Sprectre_Sim.png">Spectre Simulation</a></p>
+                       <LI><p><a href="vlsi_pics/spectre/Adder/CLA_TB.png">Spectre Simulation TB</a></p>
+			<LI> <p><a href="vlsi_pics/layouts/Adder/CLA_Layout.png">Layout</a></p>
+			<p>The first Post Layout link shows the inputs used to test the CLA, and the last link shows the out\
+puts. </p>
+			<LI> <p><a href="vlsi_pics/post_layout/CLA_PLTest1_InputsPart1.png">Post Layout Simulation Part 1</a></p>
+                       <LI> <p><a href="vlsi_pics/post_layout/CLA_PLTest1_Part2.png">Post Layout Simulation Part 2</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Adder/CLA_LVS_FILE.png">LVS</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Adder/CLA_DRC.png">DRC</a></p></UL>
+
+		<h2>&nbsp;&nbsp;Four Bit Adder with CLA</h2>
+                    <UL><LI><p><a href="vlsi_pics/schematics/Adder/CLA_and_Adder.jpg">Schematic</a></p>
+			<LI><p><a href="vlsi_pics/schematics/Adder/Four_Bit_Adder_Symbol.png">Symbol</a></p>
+			<LI><p><a href="vlsi_pics/functional/Adder/FourBit_with_CLA/Four_bit_without_asymNAND_closeup.png">Behavioral Simulation Before AG</a>
+			<LI><p><a href="vlsi_pics/functional/Adder/FourBit_with_CLA/Fourbit_ADD_with_XOR&NAND_FULL.png">Behavioral Simulation After AG</a></p>
+			<LI><p><a href="vlsi_pics/spectre/Adder/Four_Bit_SpectreSim.png">Spectre Simulation</a></p>
+			<LI><p><a href="vlsi_pics/spectre/Adder/Four_Bit_CLA_TB.png">Spectre Simulation TB</a></p>
+                	<LI><p><a href="vlsi_pics/layouts/Adder/Four_BitLayout.png">Layout</a>
+			<p>The first two Post Layout links show the inputs used to test the FBA with CLA, and the third link shows the out\
+puts. </p>
+                	<LI><p><a href="vlsi_pics/post_layout/Full_Adder_CLA_Test1_inputs.png">Post Layout Simulation Inputs</a>
+			<LI><p><a href="vlsi_pics/post_layout/Full_Adder_PLTest1_Inputs2.png">Post Layout Simulation Inputs</a>
+			<LI><p><a href="vlsi_pics/post_layout/Full_bit_Adder_PLTest1_outputs.png">Post Layout Simulation Outputs</a>
+                	<LI><p><a href="vlsi_pics/DRC_LVS/Adder/Four_bit_Adder_CLA_DRC.png">LVS</a>
+                	<LI><p><a href="vlsi_pics/DRC_LVS/Adder/Fourbit_adder_CLA_LVS.png">DRC</a></p></UL>
+		
+		<h2>&nbsp;&nbsp;Ones Complement</h2>
+		<p>This circuit is used for subtraction. When subtracting bits, the two's complement of second set of bits are added to the first set. In order to get the Two's Complement, the bits must be toggled and then added with a 1 (decimal value). The XOR takes in the bits that need to be toggled, and also inputs an enable that determines whether the circuit needs to add (enable=0) or subtract(enable=1). The same enable is Cin of the circuit in order to add the one bit needed to obtain the two's complement of the inputs.There was an LVS problem with the layout, so a post layout simulation could not be performed.</p>
+                	<UL><LI><p><a href="vlsi_pics/schematics/Adder/Ones_Comp_Schem.png">Schematic</a>
+			<LI> <p><a href="vlsi_pics/schematics/Adder/Ones_Comp_Symbol.png">Symbol</a>
+                	<LI><p><a href="vlsi_pics/layouts/Adder/Ones_Comp_Layout.png">Layout</a>
+			<p>The first two Post Layout links show the inputs used to test the One's Complement, and the last link shows the outputs. </p>
+                	<LI><p><a href="vlsi_pics/post_layout/Ones_Comp_PLTest1_Inputs.png">Post Layout Simulation Part 1</a>
+			<LI><p><a href="vlsi_pics/post_layout/Ones_Comp_PL_Test1_outputs.png">Post Layout Simulation Part 2</a>
+			<LI><p><a href="vlsi_pics/post_layout/Ones_Comp_PLTest1_outputs2.png">Post Layout Simulation Part 3</a>
+                	<LI><p><a href="vlsi_pics/DRC_LVS/Adder/Ones_Comp_LVS.png">LVS</a>
+                	<LI><p><a href="vlsi_pics/DRC_LVS/Adder/Ones_Comp_DRC.png">DRC</a></p></UL>
+		
+		<h2>&nbsp;&nbsp;Adder and Subtractor</h2>
+				
+                       <UL><p>The Behavioral Simulation shows the functionality for test inputs requested in previous labs, which were </p>
+				<p align=center> 01111111+00000001</p>
+				<p align=center> 100001111+01111111</p>
+				<p align=center> 10000000-00000001</p>
+				<p align=center> 01111111-10001111</p>
+			<LI><p><a href="vlsi_pics/schematics/Adder/Add_Sub_Schem.png">Schematic</a>
+			<LI><p><a href="vlsi_pics/schematics/Adder/Adder_Subtractor_symbol.png">Symbol</a>
+			<LI><p><a href="vlsi_pics/functional/Adder/Add_Sub/Add.Sub_with_NAND&XOR_Full.png">Behavioral Simulation After AG</a>
+			<LI><p><a href="vlsi_pics/functional/Adder/Add_Sub/Add_SUb_before_Full.png">Behavioral Simulation Before AG</a>
+                        <LI><p><a href="vlsi_pics/layouts/Adder/Add_Sub_Layout.png">Layout</a>
+			<LI><p><a href="vlsi_pics/DRC_LVS/Add_Sub_DRC.png">DRC</a></UL>
+		
+		<h2 style="background-color:skyblue;">&nbsp;&nbsp;Results</h2>
+                        <UL><p>The final Adder and Subtractor design was tested with the worst case, which is adding 11111111+11111111 because there is a carry in each case. The spectre simulations below show a small improvement in delay using the asymetrical gates. The output of the Adder/Subtractor with the Asymmetrical gates begins to change a few nanoseconds before the Adder/Subtractor without Asymmetrical gates. </p>
+			<LI><p><a href="vlsi_pics/schematics/Adder/Adder_Subtractor_TB.png">Test Bench</a></p>
+                        <LI><p><a href="vlsi_pics/spectre/Adder/One_bit_Cout_faster.png">One Bit Adder Cout Improvement</a>
+			<LI><p><a href="vlsi_pics/spectre/Adder/One_Bit_Sum_faster_v1.png">One Bit Adder Sum Improvement</a>
+                        <LI><p><a href="vlsi_pics/spectre/Adder/S0_Final.png">S0 Output</a>
+			<LI><p><a href="vlsi_pics/spectre/Adder/S1_Final.png">S1 Output</a>
+                        <LI><p><a href="vlsi_pics/spectre/Adder/S2_Finalv2.png">S2 Output</a>
+			<LI><p><a href="vlsi_pics/spectre/Adder/S3_Final.png">S3 Output</a>
+                        <LI><p><a href="vlsi_pics/spectre/Adder/S4_Final.png">S4 Output</a>
+			<LI><p><a href="vlsi_pics/spectre/Adder/S5_Faster_Final.png">S5 Output</a>
+			<LI><p><a href="vlsi_pics/spectre/Adder/S6_FINAL.png">S6 Output</a>
+                        <LI><p><a href="vlsi_pics/spectre/Adder/S7_Faster_FINAL.png">S7 Output</a>
+			<LI><p><a href="vlsi_pics/spectre/Adder/Cout_Faster_FINAL.png">Cout Output</a></UL>
+
+
+		<h2 style="background-color:teal;"><font color="white">&nbsp;&nbsp;Two-Sum 9-Bit Magnitude Comparator(TS9BMC)</h2></font>
+<p>A magnitude comparator is a combinational circuit that compares two numbers, say, A and B, to determine whether A>B, A<B or A=B. A 9-bit magnitude comparator was implemented using static CMOS logic with the aim of comparing two sums stored in registers. The following cells are the building blocks to the TS9BMC.</p>
+    
+                <h2>&nbsp;&nbsp;Comparator 4-bit</h2>
+<p>Each magnitude comparator has 3 outputs but only outputs an exclusive set bit to indicate the relationship between A and B.</p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/4-Bit Comparator.png">Schematic</a></p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/Comp_4Bit_sym.png">Symbol</a></p>
+                       <LI><p><a href="vlsi_pics/spectre/Comparator/Comparator 4-Bit_schemspec2.png">Schematic Spectre Simulation</a></p>
+                       <LI> <p><a href="vlsi_pics/functional/Comparator/Comparator 4-Bit_fun.png">Behavioral Simulation</a></p>
+ 			<LI><p><a href="vlsi_pics/layouts/Comparator/Comparator 4-Bit_lay.png">Layout</a></p>
+     			<LI><p><a href="vlsi_pics/DRC_LVS/Comparator/Comparator_LVS.png">LVS</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Comparator/Comp4DRC.png">DRC</a></p></UL>
+
+<p>A 9-bit magnitude comparator comprised of 3 4-bit magnitude comparators.</p>
+		<h2>&nbsp;&nbsp;Comparator 9-Bit</h2>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/Comp_9Bit.png">Schematic</a></p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/Comp_9Bit_sym.png">Symbol</a></p>
+                       <LI><p><a href="vlsi_pics/spectre/Comparator/9-Bit Comparator_Schem1a.png">Schematic Spectre Simulation(a)</a></p>
+                       <LI><p><a href="vlsi_pics/spectre/Comparator/9-Bit Comparator_Schem1b.png">Schematic Spectre Simulation(b)</a></p>
+                       <LI> <p><a href="vlsi_pics/functional/Comparator/Comp9_func.png">Behavioral Simulation</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Comparator/9-Bit_Comparator_lay.png">Layout</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Comparator/ComparatorDRC.png">DRC</a></p></UL>
+
+                <h2>&nbsp;&nbsp;Comparator Link Logic</h2>
+<p>4-bit magnitude comparators were stacked in order to form a 9-bit magnitude comparator.The comparators were stand alone units and thus had to be linked together using combinational logic. A customized cell was designed and implemented to cascade multiple standalone magnitude comparators of varying sizes.</p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/CompXLogic.png">Schematic</a></p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/CompXLogic_sym.png">Symbol</a></p>
+                       <LI> <p><a href="vlsi_pics/functional/Comparator/Comp8Logic_func.png">Behavioral Simulation</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Comparator/CompXLogic_lay.png">Layout</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Comparator/Comp8Logic_DRC.png">DRC</a></p></UL>
+
+                <h2>&nbsp;&nbsp;9-Bit Register</h2>
+<p>The 9-bit registers were built by stacking multiple D-latches.</p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/9-bit_Reg.png">Schematic</a></p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/9-bit Reg_sym.png">Symbol</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Comparator/9BitReg_lay.png">Layout</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Comparator/Reg_9-BitDRC.png">DRC</a></p></UL>
+
+
+ 		<h2>&nbsp;&nbsp;Demux</h2>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/DEMUX_1_18.png">Schematic</a></p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/DEMUX_1_18_sym.png">Symbol</a></p>
+    		       <LI><p><a href="vlsi_pics/spectre/Comparator/1_18_DEMUX_schemspec.png">Schematic Spectre Simulation</a></p>
+                        <LI><p><a href="vlsi_pics/layouts/Comparator/1_18_DEMUX_lay.png">Layout</a></p>
+                       <LI> <p><a href="vlsi_pics/DRC_LVS/Comparator/1_18_DEMUXDRC.png">DRC</a></p></UL>
+
+ 		<h2>&nbsp;&nbsp;Comparison Module</h2>
+<p>A look at the evolution of the design of the Comparison Module.</p>
+    			
+			<h3>&nbsp;&nbsp;Integration Attempt 1</h3>
+			<p>The original concept design of the TS9BMC is shown above. The approach was abandoned because it required a complex clocking synchronization.</p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/Comparator Module.png">Schematic</a></p>
+			<h3>&nbsp;&nbsp;Integration Attempt 2</h3>
+
+			<p>The second approach simplified the necessary clock input sequence. However, the implementation was still a challenge. This approach was also abandoned.</p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/cOMPARISON mODULE.png">Schematic</a></p>
+			<h3>&nbsp;&nbsp;Integration Attempt 3</h3>
+			<p>This final schematic showed promise of simpler clocking complexity but was not implemented due to a lack of time. This two-sum comparator would always compare the current sum to a previous sum stored in the 9-bit register.</p>
+                       <UL><LI><p><a href="vlsi_pics/schematics/Comparator/CompMOD3.png">Schematic</a></p>
+
+	<h2 style="background-color:teal;"><font color="white">&nbsp;&nbsp;Summary</h2></font>
+		<p>Using asymetrical gates has little impact in speed. As one can see from the results, the gates are not a great method to produce high speed circuits. These gates can be used for small changes in speed. However, the asymetrical gates did produce a shorter delay. The average delay for each sum bit output was .3ns. </p>
+
+		<p>Area: 0.37 millimeters squared</p>
+
+		<LI><p><a href="vlsi_pics/Add_Sub_Table of Completion.png">AS Table of Completion</a></p></LI>
+		
+	<p>Each individual module of the Two-Sum 9-Bit Magnitude Comparator (TS9BMC) was successfully simulated and laid out however, integration was unsuccessful. With added time, the full integration of the adder/subtractor with the TS9BMC. The greatest challenge in implementing the TS9BMC is the synchroonizing of the clocking sequence. The original design involved the use of a demultipexer which required a higher level of complexity in clocking.  </p>
+
+		<p>Area: 0.16 - 0.29 millimeters squared. Area increased as implementation complexity increased.</p>
+
+	 <LI><p><a href="vlsi_pics/ProgressTable.png">Comparator Table of Completion</a></p></LI>
+</body>
+</html>
